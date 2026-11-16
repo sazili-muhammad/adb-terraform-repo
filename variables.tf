@@ -1,23 +1,23 @@
 variable "environment" {
-  description = "Target deployment environment (dev or prod)"
+  description = "Target deployment environment (app, dev or prod)"
   type        = string
 
   validation {
-    condition     = contains(["dev", "prod"], var.environment)
-    error_message = "Environment must be either 'dev' or 'prod'."
+    condition     = contains(["dev", "app", "prod"], var.environment)
+    error_message = "Environment must be either 'dev', 'app', or 'prod'."
   }
 }
 
 variable "project_name" {
   description = "Base project prefix used for resource naming"
   type        = string
-  default     = "dataplatform"
+  default     = "personal"
 }
 
 variable "location" {
   description = "Azure region for the resource group and workspace"
   type        = string
-  default     = "southeastasia"
+  default     = "australiaeast"
 }
 
 variable "databricks_sku" {

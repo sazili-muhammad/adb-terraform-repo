@@ -1,15 +1,15 @@
-environment    = "dev"
-project_name   = "dataplatform"
-location       = "southeastasia"
+environment    = "app"
+project_name   = "personal"
+location       = "australiaeast"
 databricks_sku = "premium"
 
 cluster_config = {
   spark_version           = "" # Leave blank to automatically use the latest LTS runtime
-  node_type_id            = "Standard_DS3_v2"
-  driver_node_type_id     = "Standard_DS3_v2"
-  autotermination_minutes = 20
+  node_type_id            = "Standard_D2ds_v6"
+  driver_node_type_id     = "Standard_D2ds_v6"
+  autotermination_minutes = 30
   min_workers             = 1
-  max_workers             = 3
+  max_workers             = 1
   spot_bid_max_price      = -1
 
   spark_conf = {
@@ -18,5 +18,5 @@ cluster_config = {
 }
 
 tags = {
-  CostCenter = "Engineering-Dev"
+  CostCenter = "Data-Engineering-App"
 }

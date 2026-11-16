@@ -18,11 +18,11 @@ resource "azurerm_resource_group" "this" {
 }
 
 resource "azurerm_databricks_workspace" "this" {
-  name                        = "dbw-${local.name_prefix}"
+  name                        = "adb-${local.name_prefix}"
   resource_group_name         = azurerm_resource_group.this.name
   location                    = azurerm_resource_group.this.location
   sku                         = var.databricks_sku
-  managed_resource_group_name = "rg-${local.name_prefix}-dbw-managed"
+  managed_resource_group_name = "rg-${local.name_prefix}-adb-managed"
   tags                        = local.common_tags
 }
 
@@ -37,6 +37,7 @@ resource "databricks_cluster" "this" {
   node_type_id            = var.cluster_config.node_type_id
   driver_node_type_id     = var.cluster_config.driver_node_type_id
   autotermination_minutes = var.cluster_config.autotermination_minutes
+  data_security_mode      = "USER_ISOLATION"
 
   autoscale {
     min_workers = var.cluster_config.min_workers
@@ -44,14 +45,15 @@ resource "databricks_cluster" "this" {
   }
 
   azure_attributes {
-    availability       = var.spot_bid_max_price != 0 ? "SPOT_WITH_FALLBACK_AZURE" : "ON_DEMAND_AZURE"
+    availability       = var.cluster_config.spot_bid_max_price != 0 ? "SPOT_WITH_FALLBACK_AZURE" : "ON_DEMAND_AZURE"
     first_on_demand    = 1
     spot_bid_max_price = var.cluster_config.spot_bid_max_price
   }
 
   spark_conf = merge(
     {
-      "spark.databricks.cluster.profile" = "serverless"
+      #"spark.databricks.cluster.profile" = "serverless"
+      "spark.databricks.io.cache.enabled" : "true"
     },
     var.cluster_config.spark_conf
   )
