@@ -14,7 +14,11 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    databricks_workspace {
+      force_delete = true
+    }
+  }
 }
 
 provider "databricks" {
